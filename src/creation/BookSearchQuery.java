@@ -37,6 +37,6 @@ public class BookSearchQuery {
     if (date2 != null) {
       query.append("PUBLISHEDBEFORE(").append(date2).append(") ");
     }
-    return new BritishLibraryCatalogue().searchFor(query.toString());
+    return BritishLibraryCatalogue.searchFor(query.toString());
   }
 }
