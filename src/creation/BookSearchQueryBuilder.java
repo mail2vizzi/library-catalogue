@@ -1,5 +1,7 @@
 package creation;
 
+import creation.catalogues.OfficeLibraryCatalogue;
+
 public class BookSearchQueryBuilder {
     private String name1;
     private String name2;
@@ -33,6 +35,6 @@ public class BookSearchQueryBuilder {
     }
 
     public BookSearchQuery build() {
-        return new BookSearchQuery(name1, name2, title, date1, date2);
+        return new BookSearchQuery(name1, name2, title, date1, date2, OfficeLibraryCatalogue.getInstance());
     }
 }
