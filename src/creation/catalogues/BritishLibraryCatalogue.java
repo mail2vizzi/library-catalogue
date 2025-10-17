@@ -1,6 +1,7 @@
 package creation.catalogues;
 
 import creation.Book;
+import creation.BookSearchQuery;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class BritishLibraryCatalogue {
+public final class BritishLibraryCatalogue  extends GeneralLibraryCatalogue{
 
     static {
         //Early initialization of the singleton instance to avoid performance issue with first call to searchFor()
@@ -22,17 +23,6 @@ public final class BritishLibraryCatalogue {
     // imagine that each new instance of this object uses more than 500MB of RAM
     private static final BritishLibraryCatalogue INSTANCE;
     private final Collection<Book> catalogue = allTheBooks();
-
-    public static List<Book> searchFor(String query) {
-        return INSTANCE.catalogue.stream()
-                .filter(book -> book.matchesAuthor(QueryParser.lastNameFrom(query)))
-                .filter(book -> book.matchesAuthor(QueryParser.firstNameFrom(query)))
-                .filter(book -> book.matchesTitle(QueryParser.titleFrom(query)))
-                .filter(book -> book.publishedSince(QueryParser.publishedAfterFrom(query)))
-                .filter(book -> book.publishedBefore(QueryParser.publishedBeforeFrom(query)))
-                .collect(Collectors.toList());
-    }
-
 
     private Collection<Book> allTheBooks() {
 
@@ -54,4 +44,12 @@ public final class BritishLibraryCatalogue {
 
     }
 
+    @Override
+    public List<Book> search(String query) {
+        return super.searchFor(query, catalogue.stream());
+    }
+
+    public static LibraryCatalogue getInstance() {
+        return INSTANCE;
+    }
 }
