@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import creation.catalogues.BritishLibraryCatalogue;
 import org.junit.Test;
 
 public class BookSearchQueryTest {
@@ -63,5 +64,65 @@ public class BookSearchQueryTest {
 
         assertThat(books.size(), is(1));
         assertTrue(books.get(0).matchesAuthor("Brian Goetz"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueByAuthorSurname() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .withLastName( "dickens").build().execute();
+
+        assertThat(books.size(), is(2));
+        assertTrue(books.get(0).matchesAuthor("dickens"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueByAuthorFirstname() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .withFirstName("Jane").build().execute();
+
+        assertThat(books.size(), is(2));
+        assertTrue(books.get(0).matchesAuthor("Austen"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueByTitle() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .withTitle("Two Cities").build().execute();
+
+        assertThat(books.size(), is(1));
+        assertTrue(books.get(0).matchesAuthor("dickens"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueBeforeGivenPublicationYear() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .publishedBefore(1700).build().execute();
+
+        assertThat(books.size(), is(1));
+        assertTrue(books.get(0).matchesAuthor("Shakespeare"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueAfterGivenPublicationYear() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .publishedAfter(1950).build().execute();
+
+        assertThat(books.size(), is(1));
+        assertTrue(books.get(0).matchesAuthor("Golding"));
+    }
+
+    @Test
+    public void searchesForBooksInBritishLibraryCatalogueWithCombinationOfParameters() {
+
+        List<Book> books = new BookSearchQueryBuilder().withCatalogue(BritishLibraryCatalogue.getInstance())
+                .withLastName("dickens").publishedBefore(1840).build().execute();
+
+        assertThat(books.size(), is(1));
+        assertTrue(books.get(0).matchesAuthor("charles dickens"));
     }
 }

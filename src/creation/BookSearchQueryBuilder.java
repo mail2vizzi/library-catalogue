@@ -1,5 +1,6 @@
 package creation;
 
+import creation.catalogues.LibraryCatalogue;
 import creation.catalogues.OfficeLibraryCatalogue;
 
 public class BookSearchQueryBuilder {
@@ -8,6 +9,7 @@ public class BookSearchQueryBuilder {
     private String title;
     private Integer date1;
     private Integer date2;
+    private LibraryCatalogue catalogue;
 
     public BookSearchQueryBuilder withFirstName(String name1) {
         this.name1 = name1;
@@ -33,8 +35,14 @@ public class BookSearchQueryBuilder {
         this.date2 = date2;
         return this;
     }
+    public BookSearchQueryBuilder withCatalogue(LibraryCatalogue catalogue) {
+        this.catalogue = catalogue;
+        return this;
+    }
 
     public BookSearchQuery build() {
-        return new BookSearchQuery(name1, name2, title, date1, date2, OfficeLibraryCatalogue.getInstance());
+        //Default to OfficeLibraryCatalogue if none provided
+        return new BookSearchQuery(name1, name2, title, date1, date2,
+                catalogue == null ? OfficeLibraryCatalogue.getInstance():catalogue);
     }
 }
